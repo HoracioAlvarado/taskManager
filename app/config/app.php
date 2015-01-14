@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
+		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
 
 	),
 
@@ -189,6 +190,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+		'Sluggable'      	=> 'Cviebrock\EloquentSluggable\Facades\Sluggable',
 
 	),
 
