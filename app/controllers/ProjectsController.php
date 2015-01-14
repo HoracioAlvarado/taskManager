@@ -10,7 +10,8 @@ class ProjectsController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make('projects.index');
+		$projects = Project::all();
+		$this->layout->content=View::make('projects.index', compact('projects'));
 	}
 
 	/**
@@ -21,7 +22,7 @@ class ProjectsController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		$this->layout->content = View::make('projects.create');
 	}
 
 	/**
@@ -32,55 +33,69 @@ class ProjectsController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$input = Input::all();
+		$project = new Project($input);
+
+		if ($project->save())
+			return Redirect::route('projects.index')->with('message', 'Project created');
+		else		
+	 		return Redirect::route('projects.create')->withInput()->withErrors($project->errors());
+	}
+	 
+	/**
+	 * Update the specified resource in storage.
+	 * PUT /projects/{project}
+	 *
+	 * @param  Project  $project
+	 * @return Response
+	 */ 
+	public function update(Project $project)
+	{
+		$input = Input::all();
+		$project->fill($input);
+	 	
+	 	if ($project->updateUniques())
+			return Redirect::route('projects.show', $project->slug)->with('message', 'Project updated.');
+		else
+			return Redirect::route('projects.edit', array_get($project->getOriginal(), 'slug'))->withInput()->withErrors($project->errors());
 	}
 
 	/**
 	 * Display the specified resource.
-	 * GET /projects/{id}
+	 * GET /projects/{project}
 	 *
-	 * @param  int  $id
+	 * @param  Project  $project
 	 * @return Response
 	 */
-	public function show($id)
+	public function show(Project $project)
 	{
-		//
+		$this->layout->content = View::make('projects.show', compact('project'));
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
-	 * GET /projects/{id}/edit
+	 * GET /projects/{project}/edit
 	 *
-	 * @param  int  $id
+	 * @param  Project  $project
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit(Project $project)
 	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /projects/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
+		$this->layout->content = View::make('projects.edit', compact('project'));
 	}
 
 	/**
 	 * Remove the specified resource from storage.
-	 * DELETE /projects/{id}
+	 * DELETE /projects/{project}
 	 *
-	 * @param  int  $id
+	 * @param  Project $project
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy(Project $project)
 	{
-		//
+		$project->delete();
+	 
+		return Redirect::route('projects.index')->with('message', 'Project deleted.');
 	}
 
 }
